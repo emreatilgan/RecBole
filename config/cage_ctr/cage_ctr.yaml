@@ -1,0 +1,69 @@
+# Base config for CageCTR (context-aware CTR) in RecBole
+# Override dataset-specific fields (especially `numerical_features`) via an additional YAML.
+# Example run script will pass this file plus a dataset YAML.
+
+# Model
+model: CageCTR
+
+# Embedding
+embedding_size: 10
+
+# Towers and experts
+dropout_prob: 0.1
+mlp_hidden_size_base: [64, 64]
+mlp_hidden_size_ctx: [64]
+expert_hidden_size: [64]
+expert_num: 3
+
+# Calibration
+temp_cap_min: 0.5
+temp_cap_max: 2.0
+
+# Regularizers
+lambda_inv: 0.001      # gate entropy penalty magnitude
+lambda_cal: 0.0001     # temperature variance penalty magnitude
+
+# Identity/context fields:
+# - Leave empty to auto-resolve from USER_ID_FIELD / ITEM_ID_FIELD if available.
+# - Otherwise set explicitly, e.g. ['user_id', 'item_id'] after dataset conversion.
+identity_fields: []
+# Optional explicit context fields (remaining fields become context if empty)
+context_fields: []
+
+# Numerical feature control:
+# IMPORTANT: ContextRecommender only embeds FLOAT/FLOAT_SEQ fields listed here.
+# Provide per-dataset overrides, e.g. for Criteo: ['I1','I2',...,'I13'] (post-atomic naming).
+numerical_features: []
+
+# Training
+epochs: 10
+train_batch_size: 1024
+eval_batch_size: 1024
+learning_rate: 0.001
+weight_decay: 0.0
+seed: 42
+reproducibility: true
+
+# Evaluation
+metrics: ['AUC', 'LogLoss']
+valid_metric: AUC
+valid_metric_bigger: true
+
+# Split and evaluation args:
+# RS = Random Split; TO = temporal order if timestamps exist
+eval_args:
+  split:
+    RS: [0.8, 0.1, 0.1]
+  group_by: none
+  order: TO
+  mode: full
+
+# Early stopping
+stopping_step: 3
+
+# Device: keep CPU for macOS laptop runs
+use_gpu: false
+device: cpu
+
+# Logging
+log_wandb: false
