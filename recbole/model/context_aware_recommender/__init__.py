@@ -17,4 +17,4 @@ from recbole.model.context_aware_recommender.fignn import FiGNN
 from recbole.model.context_aware_recommender.kd_dagfm import KD_DAGFM
 from recbole.model.context_aware_recommender.eulernet import EulerNet
 
-from recbole.model.context_aware_recommender.cage_ctr import CageCTR
+from recbole.model.context_aware_recommender.cagectr import CageCTR
